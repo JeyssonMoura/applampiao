@@ -1383,7 +1383,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   codigo: {fileID: 753955036}
-  carregandoCenaHUD: {fileID: 1482333667}
 --- !u!114 &1983529192
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1398,4 +1397,5 @@ MonoBehaviour:
   historiaItem: []
   boxHistoria: []
   boxAlerta: {fileID: 1189066454}
+  carregandoCenaHUD: {fileID: 1482333667}
   itemSelecionado: 0

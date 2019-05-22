@@ -10,8 +10,6 @@ public class VerificaCodigo : MonoBehaviour {
 	private HUD AuxHUD;
 
 	public InputField codigo;
-	public GameObject carregandoCenaHUD;
-	private float carregando;
 
 	void Start () {
 		AuxHUD = GameObject.Find ("Canvas_HUD").GetComponent<HUD>();
@@ -20,12 +18,12 @@ public class VerificaCodigo : MonoBehaviour {
 	public void EnviarCodigo () {
 		if (Application.internetReachability != NetworkReachability.NotReachable) {
 			if (codigo.text != "") {
-				StartCoroutine (CarregarCena ("Jogo"));
+				AuxHUD.CarregarNovaCena ("Jogo");
 				AuxHUD.abrirBoxAvisos ("Código válido!", 2);
 				/*WWWForm form = new WWWForm ();
 				form.AddField ("codigo", codigo.text);
-				WWW EnviarDado = new WWW ("url do site", form);
-				StartCoroutine (ValidaCodigo (EnviarDado));*/
+				WWW EnviarDados = new WWW ("url do site", form);
+				StartCoroutine (ValidaCodigo (EnviarDados));*/
 			} else {
 				AuxHUD.abrirBoxAvisos ("Preencha todos os campos!", 1);
 			}
@@ -43,17 +41,5 @@ public class VerificaCodigo : MonoBehaviour {
 			
 		}
 	}
-
-	IEnumerator CarregarCena (string nomeCena){
-		carregandoCenaHUD.GetComponent<Canvas> ().enabled = true;
-		AsyncOperation cenaCarregar;
-		cenaCarregar = SceneManager.LoadSceneAsync (nomeCena);
-		while (!cenaCarregar.isDone) {
-			carregando = (int)(cenaCarregar.progress * 100.0f);
-			carregandoCenaHUD.transform.GetChild(0).GetComponent<Text>().text = "CARREGANDO... \n" + carregando + "%";
-			yield return null;
-		}
-	}
-
 
 }

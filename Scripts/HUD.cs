@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine;
 
@@ -7,9 +8,9 @@ public class HUD : MonoBehaviour {
 
 	public string[] historiaItem;
 	public GameObject[] boxHistoria;
-	public GameObject boxAlerta;
+	public GameObject boxAlerta, carregandoCenaHUD;
 	public int itemSelecionado;
-	private float tempoBox;
+	private float tempoBox, carregando;
 
 	void Start () {
 		
@@ -17,6 +18,14 @@ public class HUD : MonoBehaviour {
 
 	void Update () {
 		
+	}
+
+	public void Sair () {
+		Application.Quit ();
+	}
+
+	public void CarregarNovaCena (string nomeCena) {
+		StartCoroutine (CarregarCena (nomeCena));
 	}
 
 	public void abrirBoxAvisos (string aviso, int tipo) {
@@ -42,6 +51,17 @@ public class HUD : MonoBehaviour {
 		boxAlerta.GetComponent<Canvas> ().enabled = true;
 		yield return new WaitForSeconds(2.5f);
 		boxAlerta.GetComponent<Canvas> ().enabled = false;
+	}
+
+	IEnumerator CarregarCena (string nomeCena){
+		carregandoCenaHUD.GetComponent<Canvas> ().enabled = true;
+		AsyncOperation cenaCarregar;
+		cenaCarregar = SceneManager.LoadSceneAsync (nomeCena);
+		while (!cenaCarregar.isDone) {
+			carregando = (int)(cenaCarregar.progress * 100.0f);
+			carregandoCenaHUD.transform.GetChild(0).GetComponent<Text>().text = "CARREGANDO... \n" + carregando + "%";
+			yield return null;
+		}
 	}
 
 }
