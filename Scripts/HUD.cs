@@ -6,18 +6,58 @@ using UnityEngine;
 
 public class HUD : MonoBehaviour {
 
+	//Aux
+	private VerificaCodigo AuxVerificaCodigo;
+
 	public string[] historiaItem;
-	public GameObject[] boxHistoria;
-	public GameObject boxAlerta, carregandoCenaHUD;
+	public GameObject[] itens, meusItens;
+	public GameObject boxHistoria, boxAlerta, boxMenuItens, boxSair, barraTempo, carregandoCenaHUD;
+	public InputField ctMotivo, ctCodigo;
 	public int itemSelecionado;
 	private float tempoBox, carregando;
 
 	void Start () {
-		
+		AuxVerificaCodigo = GameObject.FindGameObjectWithTag("VCodigo").GetComponent<VerificaCodigo>();
 	}
 
 	void Update () {
-		
+		if (Input.GetKeyUp(KeyCode.Escape)) {
+			boxSair.GetComponent<Canvas> ().enabled = true;
+			boxSair.GetComponent<GraphicRaycaster> ().enabled = true;
+		}
+		//Tempo Box Menssagem
+		if (boxHistoria != null) {
+			if (tempoBox >= 1 && tempoBox <= 5) {
+				tempoBox += Time.deltaTime;
+				barraTempo.GetComponent<Image> ().fillAmount = tempoBox / 5;
+			} else {
+				tempoBox = 0;
+				boxHistoria.transform.GetChild(2).GetComponent<Button> ().interactable = true;
+			}
+		}
+	}
+
+	public void ClickEntrar () {
+		AuxVerificaCodigo.EnviarCodigo ();
+	}
+
+	public void ClickItemMenu (int idItem) {
+		if (meusItens [idItem] == null) {
+			meusItens [idItem] = (GameObject)Instantiate (itens [idItem], transform.position, transform.rotation);
+		}
+	}
+
+	public void DesativaBotao (GameObject botao) {
+		botao.GetComponent<Button> ().interactable = false;
+		botao.transform.GetChild(0).GetComponent<Image> ().enabled = false;
+	}
+
+	public void ExibirMensagem () {
+		tempoBox = 1;
+		boxHistoria.GetComponent<Canvas> ().enabled = true;
+		boxHistoria.GetComponent<GraphicRaycaster> ().enabled = true;
+		boxHistoria.transform.GetChild(2).GetComponent<Button> ().interactable = false;
+		boxHistoria.transform.GetChild(0).GetComponent<Text>().text = historiaItem[itemSelecionado];
 	}
 
 	public void Sair () {

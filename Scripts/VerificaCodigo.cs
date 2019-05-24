@@ -9,19 +9,38 @@ public class VerificaCodigo : MonoBehaviour {
 	//Aux
 	private HUD AuxHUD;
 
-	public InputField codigo;
+	private int codigo;
+
+	//Dados
+	public GameObject[] dadosScritp;
 
 	void Start () {
+		dadosScritp = GameObject.FindGameObjectsWithTag("VCodigo");
+		if(dadosScritp.Length > 1){
+			Destroy(dadosScritp[1]);
+		}
+	}
+
+	void Update () {
 		AuxHUD = GameObject.Find ("Canvas_HUD").GetComponent<HUD>();
+		DontDestroyOnLoad (this);
+	}
+
+	public void setCodigo (int _codigo) {
+		codigo = _codigo;
+	}
+
+	public int getCodigo () {
+		return codigo;
 	}
 
 	public void EnviarCodigo () {
 		if (Application.internetReachability != NetworkReachability.NotReachable) {
-			if (codigo.text != "") {
-				AuxHUD.CarregarNovaCena ("Jogo");
-				AuxHUD.abrirBoxAvisos ("Código válido!", 2);
+			if (AuxHUD.ctCodigo.text != "") {
+				setCodigo (int.Parse(AuxHUD.ctCodigo.text.ToString()));
+				AuxHUD.CarregarNovaCena ("Jogo");//Apenas para testes
 				/*WWWForm form = new WWWForm ();
-				form.AddField ("codigo", codigo.text);
+				form.AddField ("codigo", getCodigo());
 				WWW EnviarDados = new WWW ("url do site", form);
 				StartCoroutine (ValidaCodigo (EnviarDados));*/
 			} else {
@@ -36,9 +55,10 @@ public class VerificaCodigo : MonoBehaviour {
 		yield return CodigoV;
 		string status = CodigoV.text;
 		if (status == "") {
-			
+			AuxHUD.CarregarNovaCena ("Jogo");
+			AuxHUD.abrirBoxAvisos ("Código válido!", 2);
 		} else {
-			
+			AuxHUD.abrirBoxAvisos (status, 1);
 		}
 	}
 

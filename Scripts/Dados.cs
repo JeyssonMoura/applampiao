@@ -7,17 +7,14 @@ public class Dados : MonoBehaviour {
 
 	//Aux
 	private HUD AuxHUD;
+	private VerificaCodigo AuxVerificaCodigo;
 
-	public InputField ctMotivo;
 	private int respostaSN;
 	private string motivo;
 
 	void Start () {
-		
-	}
-
-	void Update () {
-		
+		AuxHUD = GameObject.Find ("Canvas_HUD").GetComponent<HUD>();
+		AuxVerificaCodigo = GameObject.FindGameObjectWithTag("VCodigo").GetComponent<VerificaCodigo>();
 	}
 
 	public void setRespostaSN (int _respostaSN) {
@@ -38,10 +35,10 @@ public class Dados : MonoBehaviour {
 
 	public void EnviarDados () {
 		if (Application.internetReachability != NetworkReachability.NotReachable) {
-			if (ctMotivo.text != "") {
-				setMotivo (ctMotivo.text);
-				AuxHUD.abrirBoxAvisos ("Resposta Enviada com sucesso!", 2);
+			if (AuxHUD.ctMotivo.text != "") {
+				setMotivo (AuxHUD.ctMotivo.text);
 				/*WWWForm form = new WWWForm ();
+				form.AddField ("vcodigo", AuxVerificaCodigo.getCodigo ().ToString());
 				form.AddField ("resposta", getRespostaSN().ToString());
 				form.AddField ("motivo", getMotivo());
 				WWW EnviarDados = new WWW ("url do site", form);
@@ -58,9 +55,9 @@ public class Dados : MonoBehaviour {
 		yield return DadosR;
 		string status = DadosR.text;
 		if (status == "") {
-
+			AuxHUD.abrirBoxAvisos ("Resposta Enviada com sucesso!", 2);
 		} else {
-
+			AuxHUD.abrirBoxAvisos (status, 1);
 		}
 	}
 
