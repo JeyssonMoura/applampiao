@@ -11,10 +11,10 @@ public class MoveItem : MonoBehaviour {
 	public int idItem;
 	public float posZ;
 	private bool statusItem = false;
+	private int click = 0;
 
 	void Start () {
 		AuxHUD = GameObject.Find ("Canvas_HUD").GetComponent<HUD>();
-		OnMouseDrag ();
 	}
 
 	void Update () {
@@ -24,6 +24,13 @@ public class MoveItem : MonoBehaviour {
 		} else {
 			AuxHUD.boxMenuItens.GetComponent<Canvas> ().enabled = false;
 			AuxHUD.boxMenuItens.GetComponent<GraphicRaycaster> ().enabled = false;
+		}
+		if (Input.GetKey (KeyCode.Mouse0) && click == 0) {
+			OnMouseDrag ();
+		} else {
+			if (Input.GetKeyUp (KeyCode.Mouse0)){
+				click = 1;
+			}
 		}
 	}
 

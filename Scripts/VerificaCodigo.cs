@@ -47,7 +47,7 @@ public class VerificaCodigo : MonoBehaviour {
 				AuxHUD.abrirBoxAvisos ("Preencha todos os campos!", 1);
 			}
 		} else {
-			AuxHUD.abrirBoxAvisos ("Não está conectado a internet!", 1);
+			AuxHUD.abrirBoxAvisos ("Não está conectado a internet!", 0);
 		}
 	}
 

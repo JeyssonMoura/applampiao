@@ -11,9 +11,10 @@ public class HUD : MonoBehaviour {
 
 	public string[] historiaItem;
 	public GameObject[] itens, meusItens;
-	public GameObject boxHistoria, boxAlerta, boxMenuItens, boxSair, barraTempo, carregandoCenaHUD;
+	public GameObject boxHistoria, boxAlerta, boxMenuItens, boxSair, boxForm, barraTempo, carregandoCenaHUD;
 	public InputField ctMotivo, ctCodigo;
-	public int itemSelecionado;
+	public Text txSelecionado;
+	public int itemSelecionado, countItens;
 	private float tempoBox, carregando;
 
 	void Start () {
@@ -34,6 +35,18 @@ public class HUD : MonoBehaviour {
 				tempoBox = 0;
 				boxHistoria.transform.GetChild(2).GetComponent<Button> ().interactable = true;
 			}
+			//Texto Selecionado
+			switch (GetComponent<Dados> ().getRespostaSN ()) {
+			case 0:
+				txSelecionado.text = " ";
+				break;
+			case 1:
+				txSelecionado.text = "VOCÊ SELECIONOU: HERÓI";
+				break;
+			case 2:
+				txSelecionado.text = "VOCÊ SELECIONOU: VILÃO";
+				break;
+			}
 		}
 	}
 
@@ -41,14 +54,32 @@ public class HUD : MonoBehaviour {
 		AuxVerificaCodigo.EnviarCodigo ();
 	}
 
+	public void ClickMenssagem () {
+		//Exibir Formulário
+		if(countItens == itens.Length){
+			boxForm.GetComponent<Canvas> ().enabled = true;
+			boxForm.GetComponent<GraphicRaycaster> ().enabled = true;
+			boxHistoria.GetComponent<Canvas> ().enabled = false;
+			boxHistoria.GetComponent<GraphicRaycaster> ().enabled = false;
+		} else {
+			boxHistoria.GetComponent<Canvas> ().enabled = false;
+			boxHistoria.GetComponent<GraphicRaycaster> ().enabled = false;
+			boxForm.GetComponent<Canvas> ().enabled = false;
+			boxForm.GetComponent<GraphicRaycaster> ().enabled = false;
+		}
+	}
+
 	public void ClickItemMenu (int idItem) {
 		if (meusItens [idItem] == null) {
-			meusItens [idItem] = (GameObject)Instantiate (itens [idItem], transform.position, transform.rotation);
+			Vector3 MousePosicao = new Vector3 (Input.mousePosition.x, Input.mousePosition.y, 1f);
+			Vector3 PosicaoObjeto = Camera.main.ScreenToWorldPoint (MousePosicao);
+			meusItens [idItem] = (GameObject)Instantiate (itens [idItem], PosicaoObjeto, transform.rotation);
+			countItens++;
 		}
 	}
 
 	public void DesativaBotao (GameObject botao) {
-		botao.GetComponent<Button> ().interactable = false;
+		botao.GetComponent<GraphicRaycaster> ().enabled = false;
 		botao.transform.GetChild(0).GetComponent<Image> ().enabled = false;
 	}
 

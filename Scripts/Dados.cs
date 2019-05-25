@@ -13,6 +13,7 @@ public class Dados : MonoBehaviour {
 	private string motivo;
 
 	void Start () {
+		setRespostaSN (0);
 		AuxHUD = GameObject.Find ("Canvas_HUD").GetComponent<HUD>();
 		AuxVerificaCodigo = GameObject.FindGameObjectWithTag("VCodigo").GetComponent<VerificaCodigo>();
 	}
@@ -36,13 +37,20 @@ public class Dados : MonoBehaviour {
 	public void EnviarDados () {
 		if (Application.internetReachability != NetworkReachability.NotReachable) {
 			if (AuxHUD.ctMotivo.text != "") {
-				setMotivo (AuxHUD.ctMotivo.text);
-				/*WWWForm form = new WWWForm ();
-				form.AddField ("vcodigo", AuxVerificaCodigo.getCodigo ().ToString());
-				form.AddField ("resposta", getRespostaSN().ToString());
-				form.AddField ("motivo", getMotivo());
-				WWW EnviarDados = new WWW ("url do site", form);
-				StartCoroutine (DadosE (EnviarDados));*/
+				if (getRespostaSN () != 0) {
+					setMotivo (AuxHUD.ctMotivo.text);
+					AuxHUD.abrirBoxAvisos ("Resposta Enviada com sucesso!", 2);//Apenas para testes
+					AuxHUD.boxForm.GetComponent<Canvas> ().enabled = false;//Apenas para testes
+					AuxHUD.boxForm.GetComponent<GraphicRaycaster> ().enabled = false;//Apenas para testes
+					/*WWWForm form = new WWWForm ();
+					form.AddField ("vcodigo", AuxVerificaCodigo.getCodigo ().ToString());
+					form.AddField ("resposta", getRespostaSN().ToString());
+					form.AddField ("motivo", getMotivo());
+					WWW EnviarDados = new WWW ("url do site", form);
+					StartCoroutine (DadosE (EnviarDados));*/
+				} else {
+					AuxHUD.abrirBoxAvisos ("Selecione Herói ou Vilão!", 1);
+				}
 			} else {
 				AuxHUD.abrirBoxAvisos ("Preencha todos os campos!", 1);
 			}
