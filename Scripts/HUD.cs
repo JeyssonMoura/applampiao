@@ -36,7 +36,7 @@ public class HUD : MonoBehaviour {
 				boxHistoria.transform.GetChild(2).GetComponent<Button> ().interactable = true;
 			}
 			//Texto Selecionado
-			switch (GetComponent<Dados> ().getRespostaSN ()) {
+			switch (GetComponent<EnviarDados> ().getRespostaSN ()) {
 			case 0:
 				txSelecionado.text = " ";
 				break;
